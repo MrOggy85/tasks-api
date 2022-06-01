@@ -20,26 +20,24 @@ async function getById(ctx: GetByIdContext) {
 }
 
 type InsertModel = Parameters<typeof handler['create']>[0];
-// type InsertModel = {
-//   name?: string;
-// };
 
 async function insert(ctx: Context) {
   const result = ctx.request.body({
     type: "json",
   });
-  const { title, description, priority, startDate, endDate, repeat }: InsertModel = await result.value as InsertModel;
+  const { title, description, priority, startDate, endDate, repeat, repeatType }: InsertModel = await result.value as InsertModel;
   if (!title) {
     throw new AppError("'title' is empty", 400);
   }
 
   await handler.create({
     title,
-    description,
-    priority,
+    description: description || '',
+    priority: priority || 0,
     startDate,
     endDate,
-    repeat,
+    repeat: repeat || '',
+    repeatType: repeatType || 'completionDate',
   });
 
   ctx.response.body = true;
@@ -84,9 +82,9 @@ type DoneContext = RouterContext<"/tasks/:id/done", { id: string }>;
 async function done(ctx: DoneContext) {
   const id = getIdParamAsNumber(ctx.params.id);
 
-  await handler.done(id);
+  const result = await handler.done(id);
 
-  ctx.response.body = true;
+  ctx.response.body = result;
 }
 
 function init(router: Router) {

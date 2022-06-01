@@ -2,8 +2,14 @@
 
 ## Tasks
 
-- [ ]  Create a Task with StartDate & EndDate
+- [x]  Create a Task with StartDate & EndDate
 - [x]  List Tasks
 - [x]  Mark Tasks as done (set completionDate)
-- [ ]  Repeat task from Due Date
-- [ ]  Repeat task from Completion Date
+- [x]  Repeat task from Due Date
+- [x]  Repeat task from Completion Date
+
+### Repeat
+- [ ] Daily
+- [ ] Weekly
+- [ ] Montlhy
+- [ ] Yearly

@@ -36,7 +36,7 @@ async function initDb() {
     Task,
   ]);
 
-  await db.sync({ drop: true, truncate: false });
+  await db.sync({ drop: false, truncate: true });
 
   await seedData();
 }

@@ -18,6 +18,7 @@ type Create = {
   endDate?: TaskModel['endDate'];
   completionDate?: TaskModel['completionDate'];
   repeat?: TaskModel['repeat'];
+  repeatType?: TaskModel['repeatType'];
 };
 
 export async function create(task: Create) {

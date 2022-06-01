@@ -1,6 +1,7 @@
 import AppError from "../AppError.ts";
 import { TaskModel } from "../db/models.ts";
 import * as entity from "../db/repository/task.ts";
+import { parseCronExpression } from "../deps.ts";
 
 export async function getAll() {
   const models = await entity.getAll();
@@ -21,7 +22,8 @@ const emptyTask: Omit<TaskModel, "id"> = {
   title: '',
   description: '',
   priority: 0,
-  repeat: '',
+  repeat: '15 */1 * * *',
+  repeatType: 'completionDate',
 }
 
 export async function create(task: Create) {
@@ -57,10 +59,28 @@ export async function done(id: number) {
     throw new AppError("No Task found", 400);
   }
 
+  const { id: _id, createdAt: _createdAt, updatedAt: _updatedAt, ...previousModel } = model;
+
+  let newTask: Create | undefined = undefined;
+
+  if (model.repeat) {
+    const hej = parseCronExpression(model.repeat);
+    const fromDate = model.repeatType === 'endDate' ? model.endDate : undefined;
+    const endDate =  hej.getNextDate(fromDate)
+
+    newTask = {
+      ...previousModel,
+      endDate,
+    }
+
+    await create(newTask)
+  }
+
   await entity.update({
-    ...model,
-    completionDate: new Date() as unknown as string,
+    id: _id,
+    ...previousModel,
+    completionDate: new Date(),
   });
 
-  return true;
+  return newTask;
 }
