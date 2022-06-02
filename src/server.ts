@@ -2,6 +2,7 @@ import {
   Application,
   ConnectionError,
   Context,
+  oakCors,
   PostgresError,
   Router,
 } from "./deps.ts";
@@ -21,6 +22,12 @@ function initServer() {
   app.addEventListener("error", (evt) => {
     console.error(evt.error);
   });
+
+  app.use(
+    oakCors({
+      origin: "http://localhost:3000",
+    }),
+  );
 
   app.use(async (ctx, next) => {
     try {
