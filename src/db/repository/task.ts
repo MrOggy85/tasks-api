@@ -11,14 +11,14 @@ export async function getById(id: number) {
 }
 
 type Create = {
-  title: TaskModel['title'];
-  description?: TaskModel['description'];
-  priority?: TaskModel['priority'];
-  startDate?: TaskModel['startDate'];
-  endDate?: TaskModel['endDate'];
-  completionDate?: TaskModel['completionDate'];
-  repeat?: TaskModel['repeat'];
-  repeatType?: TaskModel['repeatType'];
+  title: TaskModel["title"];
+  description?: TaskModel["description"];
+  priority?: TaskModel["priority"];
+  startDate?: TaskModel["startDate"];
+  endDate?: TaskModel["endDate"];
+  completionDate?: TaskModel["completionDate"];
+  repeat?: TaskModel["repeat"];
+  repeatType?: TaskModel["repeatType"];
 };
 
 export async function create(task: Create) {

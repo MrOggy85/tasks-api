@@ -5,9 +5,9 @@ export type TaskModel = {
   title: string;
   description: string;
   priority: 0 | 1 | 2 | 3 | 4;
-  startDate?: Date;
-  endDate?: Date;
-  completionDate?: Date;
+  startDate: Date | null;
+  endDate: Date | null;
+  completionDate: Date | null;
 
   /**
    * CRON string
@@ -19,16 +19,16 @@ export type TaskModel = {
   /**
    * Repeat from which date
    */
-  repeatType: 'endDate' | 'completionDate';
+  repeatType: "endDate" | "completionDate";
 
   /**
    * timestamp default fields
    */
-  createdAt?: Date;
+  createdAt: Date;
   /**
    * timestamp default fields
    */
-  updatedAt?: Date;
+  updatedAt: Date;
 };
 
 export class Task extends Model {
@@ -55,7 +55,7 @@ export class Task extends Model {
     repeatType: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'completionDate',
+      defaultValue: "completionDate",
     },
     priority: {
       type: DataTypes.INTEGER,
