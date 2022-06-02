@@ -34,6 +34,7 @@ function initServer() {
       await next();
     } catch (err) {
       if (err instanceof PostgresError) {
+        console.log("PostgresError!");
         const postgresError = err as PostgresError;
         ctx.response.status = 400;
         ctx.response.body = postgresError.message;
@@ -48,7 +49,12 @@ function initServer() {
       }
 
       if (err instanceof ConnectionError) {
+        console.log("ConnectionError");
         // e.g. The session was terminated by the database
+        await initDb();
+      }
+      if (err instanceof Deno.errors.BrokenPipe) {
+        console.log("BrokenPipe");
         await initDb();
       }
 
