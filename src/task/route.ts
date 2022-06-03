@@ -59,11 +59,11 @@ async function update(ctx: Context) {
   const result = ctx.request.body({
     type: "json",
   });
-  const { id, title, description, priority, startDate, endDate, repeat }:
+  const { id, title, description, priority, startDate, endDate, repeat, repeatType }:
     UpdateModel = await result.value;
   const idAsNumber = getIdParamAsNumber(id);
 
-  // await handler.getById(idAsNumber);
+  await handler.getById(idAsNumber);
 
   handler.update({
     id: idAsNumber,
@@ -73,6 +73,7 @@ async function update(ctx: Context) {
     startDate,
     endDate,
     repeat,
+    repeatType,
   });
 
   ctx.response.body = true;

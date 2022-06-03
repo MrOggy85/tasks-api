@@ -73,8 +73,8 @@ export async function done(id: number) {
 
   if (model.repeat) {
     const cron = parseCronExpression(model.repeat);
-    const fromDate = model.repeatType === "endDate" ? model.endDate : undefined;
-    const endDate = cron.getNextDate(fromDate || undefined);
+    const fromDate = model.repeatType === "endDate" ? model.endDate || undefined : undefined;
+    const endDate = cron.getNextDate(fromDate);
 
     newTask = {
       ...previousModel,
