@@ -20,13 +20,14 @@ type Create = Parameters<typeof entity["create"]>[0];
 
 const emptyTask: Omit<
   TaskModel,
-  "id" | "startDate" | "endDate" | "completionDate" | "createdAt" | "updatedAt"
-> = {
+  "id" | "startDate" | "endDate" | "completionDate" | "createdAt" | "updatedAt" | "tags"
+> & { tagIds: number[]; } = {
   title: "",
   description: "",
   priority: 0,
   repeat: "15 */1 * * *",
   repeatType: "completionDate",
+  tagIds: [],
 };
 
 export async function create(task: Create) {

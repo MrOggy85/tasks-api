@@ -33,6 +33,7 @@ async function insert(ctx: Context) {
     endDate,
     repeat,
     repeatType,
+    tagIds,
   }: InsertModel = await result.value as InsertModel;
   if (!title) {
     throw new AppError("'title' is empty", 400);
@@ -46,6 +47,7 @@ async function insert(ctx: Context) {
     endDate,
     repeat: repeat || "",
     repeatType: repeatType || "completionDate",
+    tagIds,
   });
 
   ctx.response.body = true;

@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "../deps.ts";
+import { DataTypes, Model, Relationships } from "../deps.ts";
 
 export type TaskModel = {
   id: number;
@@ -20,6 +20,8 @@ export type TaskModel = {
    * Repeat from which date
    */
   repeatType: "endDate" | "completionDate";
+
+  tags: TagModel[];
 
   /**
    * timestamp default fields
@@ -74,4 +76,54 @@ export class Task extends Model {
       allowNull: true,
     },
   };
+
+  static tags() {
+    return this.hasMany(Tag);
+  }
 }
+
+export type TagModel = {
+  id: number;
+  name: string;
+  bgColor: string;
+  textColor: string;
+
+  /**
+   * timestamp default fields
+   */
+  createdAt: Date;
+  /**
+   * timestamp default fields
+   */
+  updatedAt: Date;
+};
+
+export class Tag extends Model {
+  static table = "tag";
+  static timestamps = true;
+  static fields = {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    bgColor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    textColor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  };
+
+  static tasks() {
+    return this.hasMany(Task);
+  }
+}
+
+export const TagTask = Relationships.manyToMany(Tag, Task);

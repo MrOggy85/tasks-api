@@ -6,7 +6,8 @@ import {
   PostgresError,
   Router,
 } from "./deps.ts";
-import initTagsRoutes from "./task/route.ts";
+import initTaskRoutes from "./task/route.ts";
+import initTagsRoutes from "./tags/route.ts";
 import AppError from "./AppError.ts";
 import initDb from "./db/initDb.ts";
 
@@ -72,6 +73,7 @@ function initServer() {
       context.response.body = "Hello world!";
     });
 
+  initTaskRoutes(router);
   initTagsRoutes(router);
 
   app.use(router.routes());

@@ -1,13 +1,58 @@
-import { Task, TaskModel } from "../models.ts";
+import { Task, TaskModel, TagTask, Tag, TagModel } from "../models.ts";
+
+async function createTagTasks(
+  tagIds: number[],
+  taskId: TaskModel["id"],
+) {
+  const promises = tagIds.map((tagId) => {
+    return TagTask.create({
+      tagId,
+      taskId,
+    });
+  });
+  await Promise.all(promises);
+}
+
+async function getTags(taskId: number) {
+  const tags = await Tag
+    .select(Tag.field('id'), Tag.field('name'), Tag.field('bg_color'), Tag.field('text_color'))
+    .join(TagTask, TagTask.field("tag_id"), Tag.field("id"))
+    .where(TagTask.field("task_id"), taskId)
+    .get();
+  return tags as unknown as TagModel[];
+}
+
+async function getTaskWithTags(task: TaskModel) {
+  const tags = await getTags(task.id);
+  return {
+    ...task,
+    tags,
+  };
+}
 
 export async function getAll() {
-  const m = await Task.all();
-  return m as unknown as TaskModel[];
+  const m = await Task.all() as unknown as TaskModel[];
+
+  const promises = m.map((x) => {
+    return getTaskWithTags(x);
+  });
+
+  const mWithTags = Promise.all(promises);
+
+  return mWithTags;
 }
 
 export async function getById(id: number) {
-  const m = await Task.where("id", id).first();
-  return m as unknown as TaskModel | undefined;
+  const m = await Task
+    .where(Task.field("id"), id)
+    .first();
+
+  const tags = await getTags(id);
+
+  return {
+    ...m,
+    tags,
+  } as unknown as TaskModel | undefined;
 }
 
 type Create = {
@@ -19,10 +64,13 @@ type Create = {
   completionDate?: TaskModel["completionDate"];
   repeat?: TaskModel["repeat"];
   repeatType?: TaskModel["repeatType"];
+  tagIds?: number[];
 };
 
 export async function create(task: Create) {
-  await Task.create({ ...task });
+  const { tagIds, ...t } = task;
+  const { id } = await Task.create({ ...t });
+  await createTagTasks(tagIds || [], id as number);
 }
 
 type Update = Partial<Create> & {
@@ -30,7 +78,8 @@ type Update = Partial<Create> & {
 };
 
 export async function update({ id, ...task }: Update) {
-  await Task.where("id", id).update({ ...task });
+  const { tagIds, ...t } = task;
+  await Task.where("id", id).update({ ...t });
 }
 
 export async function remove(id: TaskModel["id"]) {

@@ -1,6 +1,6 @@
 import { Database, PostgresConnector } from "../deps.ts";
 import getEnv from "../getEnv.ts";
-import { Task } from "./models.ts";
+import { Tag, Task, TagTask } from "./models.ts";
 
 const DB_USER = getEnv("DB_USER");
 const DB_PASSWORD = getEnv("DB_PASSWORD");
@@ -16,7 +16,7 @@ console.log(
 );
 console.log("DB_NAME", DB_NAME);
 
-async function initDb() {
+function initDb() {
   const connector = new PostgresConnector({
     username: DB_USER,
     password: DB_PASSWORD,
@@ -32,9 +32,11 @@ async function initDb() {
 
   db.link([
     Task,
+    Tag,
+    TagTask,
   ]);
 
-  await db.sync({ drop: false, truncate: false });
+  // await db.sync({ drop: true, truncate: false });
 }
 
 export default initDb;
