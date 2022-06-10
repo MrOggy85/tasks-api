@@ -13,6 +13,14 @@ async function createTagTasks(
   await Promise.all(promises);
 }
 
+async function removeTagTasksByTaskId(
+  taskId: TaskModel["id"],
+) {
+  await TagTask.where({
+    taskId,
+  }).delete();
+}
+
 async function getTags(taskId: number) {
   const tags = await Tag
     .select(Tag.field('id'), Tag.field('name'), Tag.field('bg_color'), Tag.field('text_color'))
@@ -80,8 +88,12 @@ type Update = Partial<Create> & {
 export async function update({ id, ...task }: Update) {
   const { tagIds, ...t } = task;
   await Task.where("id", id).update({ ...t });
+
+  await removeTagTasksByTaskId(id);
+  await createTagTasks(tagIds || [], id as number);
 }
 
 export async function remove(id: TaskModel["id"]) {
+  await removeTagTasksByTaskId(id);
   await Task.deleteById(id);
 }
