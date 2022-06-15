@@ -10,6 +10,7 @@ import initTaskRoutes from "./task/route.ts";
 import initTagsRoutes from "./tags/route.ts";
 import AppError from "./AppError.ts";
 import initDb from "./db/initDb.ts";
+import getEnv from "./getEnv.ts";
 
 function logger(ctx: Context) {
   console.log(
@@ -64,6 +65,15 @@ function initServer() {
       ctx.response.body = "Internal Server Error";
     } finally {
       logger(ctx);
+    }
+  });
+
+  app.use(async (ctx, next) => {
+    const authHeader = ctx.request.headers.get('Authorization');
+    if (authHeader === getEnv('AUTH_HEADER')) {
+      await next();
+    } else {
+      throw new AppError('unauthorized', 401);
     }
   });
 

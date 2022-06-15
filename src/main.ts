@@ -7,6 +7,15 @@ if (getEnv("RUN_DIAGNOSTICS") === "1") {
   printDiagnostic();
 }
 
+type KEY = Parameters<typeof getEnv>[0];
+
+const mandatoryEnvVars: KEY[] = ['DB_HOST', 'DB_NAME', 'DB_PASSWORD', 'DB_PORT', 'DB_USER', 'AUTH_HEADER'];
+mandatoryEnvVars.forEach(x => {
+  if (!getEnv(x)) {
+    throw new Error(`Env var: ${x} not set!`);
+  }
+});
+
 // Deno Deploy Env vars
 console.log("DENO_REGION", Deno.env.get("DENO_REGION"));
 console.log("DENO_DEPLOYMENT_ID", Deno.env.get("DENO_DEPLOYMENT_ID"));

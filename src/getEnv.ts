@@ -5,7 +5,8 @@ type KEY =
   | "DB_HOST"
   | "DB_PORT"
   | "RUN_DIAGNOSTICS"
-  | "DB_LOG_QUERY";
+  | "DB_LOG_QUERY"
+  | "AUTH_HEADER";
 
 function getEnv(key: KEY) {
   return Deno.env.get(key) || "";
