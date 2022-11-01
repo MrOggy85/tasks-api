@@ -25,9 +25,12 @@ function initServer() {
     console.error(evt.error);
   });
 
+  const corsRaw = getEnv('CORS_ORIGINS');
+  const origin = corsRaw.split(',');
+
   app.use(
     oakCors({
-      origin: "http://localhost:3000",
+      origin,
     }),
   );
 
