@@ -3,15 +3,15 @@ export {
   Context,
   helpers,
   Router,
-} from "https://deno.land/x/oak@v10.2.0/mod.ts";
+} from "https://deno.land/x/oak@v11.1.0/mod.ts";
 export { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-export type { RouterContext } from "https://deno.land/x/oak@v10.2.0/mod.ts";
+export type { RouterContext } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 export {
   ConnectionError,
   PostgresError,
-} from "https://deno.land/x/postgres@v0.14.2/mod.ts";
+} from "https://deno.land/x/postgres@v0.17.0/mod.ts";
 
-export { v4 as uuid } from "https://deno.land/std@0.125.0/uuid/mod.ts";
+export { v4 as uuid } from "https://deno.land/std@0.161.0/uuid/mod.ts";
 export {
   Database,
   DataTypes,
