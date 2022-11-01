@@ -75,6 +75,7 @@ export async function done(id: number) {
     id: _id,
     createdAt: _createdAt,
     updatedAt: _updatedAt,
+    tags: _tags,
     ...previousModel
   } = model;
 
@@ -98,6 +99,7 @@ export async function done(id: number) {
   await entity.update({
     id: _id,
     ...previousModel,
+    tagIds: _tags.map(x => x.id),
     completionDate: new Date(),
   });
 
@@ -114,11 +116,14 @@ export async function unDone(id: number) {
     id: _id,
     createdAt: _createdAt,
     updatedAt: _updatedAt,
+    tags: tags,
     ...previousModel
   } = model;
+
   await entity.update({
     id: _id,
     ...previousModel,
+    tagIds: tags.map(x => x.id),
     completionDate: null,
   });
 
