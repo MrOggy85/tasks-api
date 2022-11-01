@@ -27,6 +27,7 @@ function initServer() {
 
   const corsRaw = getEnv('CORS_ORIGINS');
   const origin = corsRaw.split(',');
+  console.log('origin', origin);
 
   app.use(
     oakCors({
