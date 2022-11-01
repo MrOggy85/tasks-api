@@ -7,7 +7,7 @@ type KEY =
   | "RUN_DIAGNOSTICS"
   | "DB_LOG_QUERY"
   | "AUTH_HEADER"
-  | 'CORS_ORIGINS'
+  | "CORS_ORIGINS";
 
 function getEnv(key: KEY) {
   return Deno.env.get(key) || "";

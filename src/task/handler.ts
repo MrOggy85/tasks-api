@@ -18,17 +18,25 @@ export async function getById(id: number) {
 
 type Create = Parameters<typeof entity["create"]>[0];
 
-const emptyTask: Omit<
-  TaskModel,
-  "id" | "startDate" | "endDate" | "completionDate" | "createdAt" | "updatedAt" | "tags"
-> & { tagIds: number[]; } = {
-  title: "",
-  description: "",
-  priority: 0,
-  repeat: "15 */1 * * *",
-  repeatType: "completionDate",
-  tagIds: [],
-};
+const emptyTask:
+  & Omit<
+    TaskModel,
+    | "id"
+    | "startDate"
+    | "endDate"
+    | "completionDate"
+    | "createdAt"
+    | "updatedAt"
+    | "tags"
+  >
+  & { tagIds: number[] } = {
+    title: "",
+    description: "",
+    priority: 0,
+    repeat: "15 */1 * * *",
+    repeatType: "completionDate",
+    tagIds: [],
+  };
 
 export async function create(task: Create) {
   await entity.create({
@@ -74,7 +82,9 @@ export async function done(id: number) {
 
   if (model.repeat) {
     const cron = parseCronExpression(model.repeat);
-    const fromDate = model.repeatType === "endDate" ? model.endDate || undefined : undefined;
+    const fromDate = model.repeatType === "endDate"
+      ? model.endDate || undefined
+      : undefined;
     const endDate = cron.getNextDate(fromDate);
 
     newTask = {

@@ -11,7 +11,7 @@ async function getAll(ctx: Context) {
   ctx.response.body = models;
 }
 
-type GetByIdContext = RouterContext<"/tasks/:id", { id: string; }>;
+type GetByIdContext = RouterContext<"/tasks/:id", { id: string }>;
 async function getById(ctx: GetByIdContext) {
   const id = getIdParamAsNumber(ctx.params.id);
 
@@ -61,8 +61,17 @@ async function update(ctx: Context) {
   const result = ctx.request.body({
     type: "json",
   });
-  const { id, title, description, priority, startDate, endDate, repeat, repeatType, tagIds }:
-    UpdateModel = await result.value;
+  const {
+    id,
+    title,
+    description,
+    priority,
+    startDate,
+    endDate,
+    repeat,
+    repeatType,
+    tagIds,
+  }: UpdateModel = await result.value;
   const idAsNumber = getIdParamAsNumber(id);
 
   await handler.getById(idAsNumber);
@@ -82,7 +91,7 @@ async function update(ctx: Context) {
   ctx.response.body = true;
 }
 
-type RemoveContext = RouterContext<"/tasks/:id", { id: string; }>;
+type RemoveContext = RouterContext<"/tasks/:id", { id: string }>;
 async function remove(ctx: RemoveContext) {
   const id = getIdParamAsNumber(ctx.params.id);
 
@@ -91,7 +100,7 @@ async function remove(ctx: RemoveContext) {
   ctx.response.body = true;
 }
 
-type DoneContext = RouterContext<"/tasks/:id/done", { id: string; }>;
+type DoneContext = RouterContext<"/tasks/:id/done", { id: string }>;
 async function done(ctx: DoneContext) {
   const id = getIdParamAsNumber(ctx.params.id);
 
@@ -100,7 +109,7 @@ async function done(ctx: DoneContext) {
   ctx.response.body = result;
 }
 
-type UnDoneContext = RouterContext<"/tasks/:id/undone", { id: string; }>;
+type UnDoneContext = RouterContext<"/tasks/:id/undone", { id: string }>;
 async function unDone(ctx: UnDoneContext) {
   const id = getIdParamAsNumber(ctx.params.id);
   const result = await handler.unDone(id);

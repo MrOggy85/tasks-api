@@ -18,7 +18,7 @@ type Create = Parameters<typeof entity["create"]>[0];
 
 export async function create(tag: Create) {
   await entity.create({
-    ...tag
+    ...tag,
   });
 
   return true;

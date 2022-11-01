@@ -25,9 +25,9 @@ function initServer() {
     console.error(evt.error);
   });
 
-  const corsRaw = getEnv('CORS_ORIGINS');
-  const origin = corsRaw.split(',');
-  console.log('origin', origin);
+  const corsRaw = getEnv("CORS_ORIGINS");
+  const origin = corsRaw.split(",");
+  console.log("origin", origin);
 
   app.use(
     oakCors({
@@ -73,11 +73,11 @@ function initServer() {
   });
 
   app.use(async (ctx, next) => {
-    const authHeader = ctx.request.headers.get('Authorization');
-    if (authHeader === getEnv('AUTH_HEADER')) {
+    const authHeader = ctx.request.headers.get("Authorization");
+    if (authHeader === getEnv("AUTH_HEADER")) {
       await next();
     } else {
-      throw new AppError('unauthorized', 401);
+      throw new AppError("unauthorized", 401);
     }
   });
 

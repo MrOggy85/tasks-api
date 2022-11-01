@@ -1,4 +1,4 @@
-import { Task, TaskModel, TagTask, Tag, TagModel } from "../models.ts";
+import { Tag, TagModel, TagTask, Task, TaskModel } from "../models.ts";
 
 async function createTagTasks(
   tagIds: number[],
@@ -23,7 +23,12 @@ async function removeTagTasksByTaskId(
 
 async function getTags(taskId: number) {
   const tags = await Tag
-    .select(Tag.field('id'), Tag.field('name'), Tag.field('bg_color'), Tag.field('text_color'))
+    .select(
+      Tag.field("id"),
+      Tag.field("name"),
+      Tag.field("bg_color"),
+      Tag.field("text_color"),
+    )
     .join(TagTask, TagTask.field("tag_id"), Tag.field("id"))
     .where(TagTask.field("task_id"), taskId)
     .get();

@@ -11,7 +11,7 @@ async function getAll(ctx: Context) {
   ctx.response.body = models;
 }
 
-type GetByIdContext = RouterContext<"/tags/:id", { id: string; }>;
+type GetByIdContext = RouterContext<"/tags/:id", { id: string }>;
 async function getById(ctx: GetByIdContext) {
   const id = getIdParamAsNumber(ctx.params.id);
 
@@ -25,7 +25,8 @@ async function insert(ctx: Context) {
   const result = ctx.request.body({
     type: "json",
   });
-  const { name, bgColor, textColor }: InsertModel = await result.value as InsertModel;
+  const { name, bgColor, textColor }: InsertModel = await result
+    .value as InsertModel;
   if (!name) {
     throw new AppError("'name' is empty", 400);
   }
@@ -70,7 +71,7 @@ async function update(ctx: Context) {
   ctx.response.body = true;
 }
 
-type RemoveContext = RouterContext<"/tags/:id", { id: string; }>;
+type RemoveContext = RouterContext<"/tags/:id", { id: string }>;
 async function remove(ctx: RemoveContext) {
   const id = getIdParamAsNumber(ctx.params.id);
 
