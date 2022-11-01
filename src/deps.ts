@@ -21,6 +21,6 @@ export {
   SQLite3Connector,
 } from "https://deno.land/x/denodb@v1.0.40/mod.ts";
 
-export { createHash } from "https://deno.land/std@0.125.0/node/crypto.ts";
+export { createHash } from "https://deno.land/std@0.161.0/node/crypto.ts";
 
 export { parseCronExpression } from "https://cdn.skypack.dev/cron-schedule@3.0.6?dts";
