@@ -1,14 +1,31 @@
 import AppError from "../AppError.ts";
-import { Context, Router, RouterContext } from "../deps.ts";
+import { Context, helpers, Router, RouterContext } from "../deps.ts";
 import { getIdParamAsNumber } from "../routeValidation.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/tasks";
 
+type GetAllQuery = {
+  completiondate?: "y" | "n";
+};
+
 async function getAll(ctx: Context) {
+  const q = helpers.getQuery(ctx) as GetAllQuery;
+
   const models = await handler.getAll();
 
-  ctx.response.body = models;
+  if (q.completiondate) {
+    const completionDate = q.completiondate;
+    if (completionDate !== "y" && completionDate !== "n") {
+      throw new AppError("'completiondate' is not 'y' or 'n'", 400);
+    }
+    const filteredModels = models.filter((x) => {
+      return completionDate === "y" ? !!x.completionDate : !x.completionDate;
+    });
+    ctx.response.body = filteredModels;
+  } else {
+    ctx.response.body = models;
+  }
 }
 
 type GetByIdContext = RouterContext<"/tasks/:id", { id: string }>;
