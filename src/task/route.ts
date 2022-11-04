@@ -116,6 +116,44 @@ async function unDone(ctx: UnDoneContext) {
   ctx.response.body = result;
 }
 
+/**
+ * Entry is a simplified Task
+ * It's still technically a Task,
+ * but domain wise it's for reporting an event
+ * that was not previously planned (no Task existed)
+ */
+async function insertEntry(ctx: Context) {
+  const result = ctx.request.body({
+    type: "json",
+  });
+  const {
+    title,
+    description,
+    tagIds,
+    completionDate,
+  }: InsertModel = await result.value as InsertModel;
+  if (!title) {
+    throw new AppError("'title' is empty", 400);
+  }
+  if (!completionDate) {
+    throw new AppError("'completionDate' is empty", 400);
+  }
+
+  await handler.create({
+    title,
+    description: description || "",
+    priority: 0,
+    startDate: null,
+    endDate: null,
+    repeat: "",
+    repeatType: "completionDate",
+    tagIds,
+    completionDate,
+  });
+
+  ctx.response.body = true;
+}
+
 function init(router: Router) {
   router
     .get(ROUTE, getAll)
@@ -123,6 +161,7 @@ function init(router: Router) {
     .post(`${ROUTE}`, insert)
     .post(`${ROUTE}/:id/done`, done)
     .post(`${ROUTE}/:id/undone`, unDone)
+    .post(`${ROUTE}/entry`, insertEntry)
     .put(`${ROUTE}`, update)
     .delete(`${ROUTE}/:id`, remove);
 }
