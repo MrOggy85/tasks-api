@@ -1,6 +1,6 @@
 import AppError from "../AppError.ts";
 import { TaskModel } from "../db/models.ts";
-import * as entity from "../db/repository/task.ts";
+import entity from "../db/repository/task.ts";
 import { parseCronExpression } from "../deps.ts";
 
 export async function getAll() {
