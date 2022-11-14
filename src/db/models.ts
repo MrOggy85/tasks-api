@@ -10,14 +10,23 @@ export type TaskModel = {
   completionDate: Date | null;
 
   /**
-   * CRON string
+   * CRON string or custom repeat pattern
    *
-   * e.g: '* * * * *'
+   * If 'repeatType' is 'endDate' then a "CRON string" is expected.
+   * - should be expressed in local time (JST)
+   * - e.g: '* * * * *'
+   *
+   * If 'repeatType' is 'completionDate' then a "repeat pattern" is expected.
+   * - "${Multiplier}${Duration}"
+   * - e.g. "D14" (after 14 Days)
+   * - e.g. "H10" (after 10 Hours)
    */
   repeat: string;
 
   /**
    * Repeat from which date
+   * - "endDate" is suitable for fixed dates, such as birthdays and regular events
+   * - "completionDate" is suitable for chores
    */
   repeatType: "endDate" | "completionDate";
 

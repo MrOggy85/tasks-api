@@ -1,7 +1,7 @@
 import AppError from "../AppError.ts";
 import { TaskModel } from "../db/models.ts";
-import * as entity from "../db/repository/task.ts";
-import { parseCronExpression } from "../deps.ts";
+import entity from "../db/repository/task.ts";
+import { add, intervalToDuration, parseCronExpression, sub } from "../deps.ts";
 
 export async function getAll() {
   const models = await entity.getAll();
@@ -65,6 +65,8 @@ export async function remove(id: number) {
   return true;
 }
 
+type AddType = "D";
+
 export async function done(id: number) {
   const model = await entity.getById(id);
   if (!model) {
@@ -82,15 +84,46 @@ export async function done(id: number) {
   let newTask: Create | undefined = undefined;
 
   if (model.repeat) {
-    const cron = parseCronExpression(model.repeat);
-    const fromDate = model.repeatType === "endDate"
-      ? model.endDate || undefined
-      : undefined;
-    const endDate = cron.getNextDate(fromDate);
+    if (!model.endDate) {
+      throw new AppError("Repeatable Task needs endDate", 400);
+    }
+
+    let newEndDate = null;
+    let newStartDate = null;
+
+    if (model.repeatType === "endDate") {
+      const cron = parseCronExpression(model.repeat);
+      newEndDate = cron.getNextDate();
+
+      if (model.startDate) {
+        const duration = intervalToDuration({
+          start: model.startDate,
+          end: model.endDate,
+        });
+
+        newStartDate = sub(newEndDate, duration);
+      }
+    } else {
+      const addType = model.repeat.substring(0, 1) as AddType;
+      const duration = Number(model.repeat.substring(1));
+
+      switch (addType) {
+        case "D":
+          newEndDate = add(model.endDate, { days: duration });
+          if (model.startDate) {
+            newStartDate = add(model.startDate, { days: duration });
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
 
     newTask = {
       ...previousModel,
-      endDate,
+      endDate: newEndDate,
+      startDate: newStartDate,
     };
 
     await create(newTask);

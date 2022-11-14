@@ -43,7 +43,7 @@ async function getTaskWithTags(task: TaskModel) {
   };
 }
 
-export async function getAll() {
+async function getAll() {
   const m = await Task.all() as unknown as TaskModel[];
 
   const promises = m.map((x) => {
@@ -55,7 +55,7 @@ export async function getAll() {
   return mWithTags;
 }
 
-export async function getById(id: number) {
+async function getById(id: number) {
   const m = await Task
     .where(Task.field("id"), id)
     .first();
@@ -80,7 +80,7 @@ type Create = {
   tagIds?: number[];
 };
 
-export async function create(task: Create) {
+async function create(task: Create) {
   const { tagIds, ...t } = task;
   const { id } = await Task.create({ ...t });
   await createTagTasks(tagIds || [], id as number);
@@ -90,7 +90,7 @@ type Update = Partial<Create> & {
   id: TaskModel["id"];
 };
 
-export async function update({ id, ...task }: Update) {
+async function update({ id, ...task }: Update) {
   const { tagIds, ...t } = task;
   await Task.where("id", id).update({ ...t });
 
@@ -98,7 +98,17 @@ export async function update({ id, ...task }: Update) {
   await createTagTasks(tagIds || [], id as number);
 }
 
-export async function remove(id: TaskModel["id"]) {
+async function remove(id: TaskModel["id"]) {
   await removeTagTasksByTaskId(id);
   await Task.deleteById(id);
 }
+
+const entity = {
+  remove,
+  update,
+  create,
+  getById,
+  getAll,
+};
+
+export default entity;

@@ -26,3 +26,10 @@ export {
 export { createHash } from "https://deno.land/std@0.161.0/node/crypto.ts";
 
 export { parseCronExpression } from "https://cdn.skypack.dev/cron-schedule@3.0.6?dts";
+
+export {
+  default as intervalToDuration,
+} from "https://deno.land/x/date_fns@v2.22.1/intervalToDuration/index.ts";
+
+export { default as add } from "https://deno.land/x/date_fns@v2.22.1/add/index.ts";
+export { default as sub } from "https://deno.land/x/date_fns@v2.22.1/sub/index.js";
