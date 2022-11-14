@@ -103,12 +103,12 @@ async function remove(id: TaskModel["id"]) {
   await Task.deleteById(id);
 }
 
-const hej = {
+const entity = {
   remove,
   update,
   create,
   getById,
   getAll,
-}
+};
 
-export default hej
+export default entity;
