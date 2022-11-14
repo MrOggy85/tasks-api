@@ -124,9 +124,6 @@ export async function done(id: number) {
 
             newStartDate = sub(newEndDate, duration);
           }
-          if (model.startDate) {
-            newStartDate = add(model.startDate, { days: duration });
-          }
           break;
         }
 

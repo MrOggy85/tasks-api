@@ -131,8 +131,10 @@ describe("Given 'done' is called", {
     // endDate in future
     {
       repeat: "D10",
+      startDate: "2022-11-23T10:30:00.000+09:00",
       endDate: "2022-11-24T06:30:00+09:00",
       expectedEndDate: "2022-11-23T06:30:00.000+09:00",
+      expectedStartDate: "2022-11-22T10:30:00.000+09:00",
       repeatType: "completionDate" as const,
     },
   ];
