@@ -120,17 +120,19 @@ describe("Given 'done' is called", {
       repeatType: "endDate" as const,
     },
     // Chore every 14 day after completion
+    // endDate overdue
     {
       repeat: "D14",
       endDate: "2022-11-12T06:30:00+09:00",
-      expectedEndDate: "2022-11-26T06:30:00.000+09:00",
+      expectedEndDate: "2022-11-27T06:30:00.000+09:00",
       repeatType: "completionDate" as const,
     },
-    // Chore every 14 day after completion, over month
+    // Chore every 10 day after completion
+    // endDate in future
     {
-      repeat: "D12",
+      repeat: "D10",
       endDate: "2022-11-24T06:30:00+09:00",
-      expectedEndDate: "2022-12-06T06:30:00.000+09:00",
+      expectedEndDate: "2022-11-23T06:30:00.000+09:00",
       repeatType: "completionDate" as const,
     },
   ];

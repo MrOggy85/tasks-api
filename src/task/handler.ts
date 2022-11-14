@@ -108,15 +108,30 @@ export async function done(id: number) {
       const duration = Number(model.repeat.substring(1));
 
       switch (addType) {
-        case "D":
-          newEndDate = add(model.endDate, { days: duration });
+        case "D": {
+          const now = new Date();
+          now.setHours(model.endDate.getHours());
+          now.setMinutes(model.endDate.getMinutes());
+          now.setSeconds(model.endDate.getSeconds());
+          now.setMilliseconds(model.endDate.getMilliseconds());
+
+          newEndDate = add(now, { days: duration });
+          if (model.startDate) {
+            const duration = intervalToDuration({
+              start: model.startDate,
+              end: model.endDate,
+            });
+
+            newStartDate = sub(newEndDate, duration);
+          }
           if (model.startDate) {
             newStartDate = add(model.startDate, { days: duration });
           }
           break;
+        }
 
         default:
-          break;
+          throw new AppError(`unknown addType: ${addType}`, 400);
       }
     }
 
