@@ -14,9 +14,25 @@ export async function getById(id: number) {
     throw new AppError("No Task found", 400);
   }
 
-  console.log("now", new Date());
-  console.log("TZ", Deno.env.get("TZ"));
-  console.log("endDate hours", model.endDate?.getUTCHours());
+  const now = new Date();
+  console.log("now 1", now);
+  // console.log("timezoneOffset in min", now.getTimezoneOffset());
+  // console.log("timezoneOffset in hours", now.getTimezoneOffset() / 60);
+  // console.log(
+  //   "endDate hours UTC",
+  //   model.endDate?.getUTCHours()!,
+  // );
+  // console.log(
+  //   "endDate hours - timezone",
+  //   model.endDate?.getUTCHours()! - now.getTimezoneOffset() / 60,
+  // );
+
+  now.setUTCHours(model.endDate!.getUTCHours());
+
+  // const now2 = new Date();
+  // now2.setHours(model.endDate!.getUTCHours() - now.getTimezoneOffset() / 60);
+
+  console.log("now 2", now.toISOString());
 
   return model;
 }
