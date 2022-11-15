@@ -79,6 +79,8 @@ describe("Given 'done' is called", {
       tags: _tags,
       createdAt: _createdAt,
       updatedAt: _updatedAt,
+      endDate: _endDate,
+      startDate: _startDate,
       ...expectedModel
     } = mockModel;
 
@@ -86,7 +88,7 @@ describe("Given 'done' is called", {
       args: [{
         ...expectedModel,
         tagIds: [],
-        completionDate: new Date(FAKE_DATE),
+        completionDate: new Date(FAKE_DATE).toISOString(),
       }],
     });
   });
@@ -137,6 +139,15 @@ describe("Given 'done' is called", {
       expectedStartDate: "2022-11-22T10:30:00.000+09:00",
       repeatType: "completionDate" as const,
     },
+    // Chore every day after completion
+    {
+      repeat: "D1",
+      startDate: "2022-11-12T06:30:00.000+09:00",
+      endDate: "2022-11-12T06:30:00+09:00",
+      expectedEndDate: "2022-11-14T06:30:00.000+09:00",
+      expectedStartDate: "2022-11-14T06:30:00.000+09:00",
+      repeatType: "completionDate" as const,
+    },
   ];
 
   testCases.forEach((x) => {
@@ -164,6 +175,7 @@ describe("Given 'done' is called", {
         tags: _tags,
         createdAt: _createdAt,
         updatedAt: _updatedAt,
+        completionDate: _completionDate,
         ...expectedModel
       } = mockModel;
 
@@ -173,9 +185,9 @@ describe("Given 'done' is called", {
           tagIds: [],
           repeat: x.repeat,
           repeatType: x.repeatType,
-          completionDate: null,
-          endDate: new Date(x.expectedEndDate),
-          startDate: x.expectedStartDate ? new Date(x.expectedStartDate) : null,
+          // completionDate: null,
+          endDate: new Date(x.expectedEndDate).toISOString(),
+          startDate: x.expectedStartDate ? new Date(x.expectedStartDate).toISOString() : undefined,
         }],
       });
     });

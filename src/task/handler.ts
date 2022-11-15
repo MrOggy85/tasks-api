@@ -145,8 +145,6 @@ export async function done(id: number) {
       startDate: newStartDate?.toISOString(),
     };
 
-    console.log("newTask", newTask);
-
     await create(newTask);
   }
 
