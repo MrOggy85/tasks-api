@@ -16,7 +16,7 @@ export async function getById(id: number) {
 
   console.log("now", new Date());
   console.log("TZ", Deno.env.get("TZ"));
-  console.log("endDate hours", model.endDate?.getHours());
+  console.log("endDate hours", model.endDate?.getUTCHours());
 
   return model;
 }
@@ -142,6 +142,8 @@ export async function done(id: number) {
       endDate: newEndDate,
       startDate: newStartDate,
     };
+
+    console.log("newTask", newTask);
 
     await create(newTask);
   }
