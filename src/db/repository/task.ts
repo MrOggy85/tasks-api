@@ -72,9 +72,9 @@ type Create = {
   title: TaskModel["title"];
   description?: TaskModel["description"];
   priority?: TaskModel["priority"];
-  startDate?: TaskModel["startDate"];
-  endDate?: TaskModel["endDate"];
-  completionDate?: TaskModel["completionDate"];
+  startDate?: string | null | undefined;
+  endDate?: string | null | undefined;
+  completionDate?: string | null | undefined;
   repeat?: TaskModel["repeat"];
   repeatType?: TaskModel["repeatType"];
   tagIds?: number[];

@@ -78,9 +78,14 @@ export async function done(id: number) {
     id: _id,
     createdAt: _createdAt,
     updatedAt: _updatedAt,
+    completionDate: _completionDate,
     tags: _tags,
     ...previousModel
   } = model;
+
+  if (_completionDate) {
+    throw new AppError("Task already done", 400);
+  }
 
   let newTask: Create | undefined = undefined;
 
@@ -136,8 +141,8 @@ export async function done(id: number) {
 
     newTask = {
       ...previousModel,
-      endDate: newEndDate,
-      startDate: newStartDate,
+      endDate: newEndDate.toISOString(),
+      startDate: newStartDate?.toISOString(),
     };
 
     console.log("newTask", newTask);
@@ -145,11 +150,17 @@ export async function done(id: number) {
     await create(newTask);
   }
 
+  const {
+    startDate: _startDate,
+    endDate: _endDate,
+    ...updateModel
+  } = previousModel;
+
   await entity.update({
     id: _id,
-    ...previousModel,
+    ...updateModel,
     tagIds: _tags.map((x) => x.id),
-    completionDate: new Date(),
+    completionDate: new Date().toISOString(),
   });
 
   return newTask;
@@ -165,6 +176,8 @@ export async function unDone(id: number) {
     id: _id,
     createdAt: _createdAt,
     updatedAt: _updatedAt,
+    startDate: _startDate,
+    endDate: _endDate,
     tags: tags,
     ...previousModel
   } = model;
