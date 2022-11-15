@@ -13,6 +13,10 @@ export async function getById(id: number) {
   if (!model) {
     throw new AppError("No Task found", 400);
   }
+
+  console.log("now", new Date());
+  console.log("endDate hours", model.endDate?.getHours());
+
   return model;
 }
 
