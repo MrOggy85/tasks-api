@@ -15,6 +15,7 @@ export async function getById(id: number) {
   }
 
   console.log("now", new Date());
+  console.log("TZ", Deno.env.get("TZ"));
   console.log("endDate hours", model.endDate?.getHours());
 
   return model;
