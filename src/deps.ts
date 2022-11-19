@@ -29,3 +29,4 @@ export {
 } from "https://deno.land/x/date_fns@v2.22.1/intervalToDuration/index.ts";
 export { default as add } from "https://deno.land/x/date_fns@v2.22.1/add/index.ts";
 export { default as sub } from "https://deno.land/x/date_fns@v2.22.1/sub/index.js";
+export { default as isAfter } from "https://deno.land/x/date_fns@v2.22.1/isAfter/index.ts";

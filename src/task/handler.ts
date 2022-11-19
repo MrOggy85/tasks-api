@@ -1,7 +1,13 @@
 import AppError from "../AppError.ts";
 import { TaskModel } from "../db/models.ts";
 import entity from "../db/repository/task.ts";
-import { add, intervalToDuration, parseCronExpression, sub } from "../deps.ts";
+import {
+  add,
+  intervalToDuration,
+  isAfter,
+  parseCronExpression,
+  sub,
+} from "../deps.ts";
 
 export async function getAll() {
   const models = await entity.getAll();
@@ -115,7 +121,10 @@ export async function done(id: number) {
 
       switch (addType) {
         case "D": {
-          const now = new Date();
+          let now = new Date();
+          if (isAfter(now, model.endDate)) {
+            now = sub(now, { days: 1 });
+          }
 
           now.setUTCHours(model.endDate.getUTCHours());
           now.setMinutes(model.endDate.getMinutes());

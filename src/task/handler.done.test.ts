@@ -10,7 +10,7 @@ import { done } from "./handler.ts";
 import entity from "../db/repository/task.ts";
 import type { TaskModel } from "../db/models.ts";
 
-const FAKE_DATE = "2022-11-13T03:24:00+09:00";
+const FAKE_DATE = "2022-11-13T13:24:00+09:00";
 
 const mockModel: TaskModel = {
   id: 1,
@@ -23,8 +23,8 @@ const mockModel: TaskModel = {
   repeat: "",
   repeatType: "completionDate",
   tags: [],
-  createdAt: new Date("2022-11-13T03:24:00+09:00"),
-  updatedAt: new Date("2022-11-13T03:24:00+09:00"),
+  createdAt: new Date("2022-11-13T13:24:00+09:00"),
+  updatedAt: new Date("2022-11-13T13:24:00+09:00"),
 };
 
 let getByIdStub: Stub | undefined;
@@ -135,8 +135,8 @@ describe("Given 'done' is called", {
       repeat: "D10",
       startDate: "2022-11-23T10:30:00.000+09:00",
       endDate: "2022-11-24T06:30:00+09:00",
-      expectedEndDate: "2022-11-23T06:30:00.000+09:00",
-      expectedStartDate: "2022-11-22T10:30:00.000+09:00",
+      expectedEndDate: "2022-11-24T06:30:00.000+09:00",
+      expectedStartDate: "2022-11-23T10:30:00.000+09:00",
       repeatType: "completionDate" as const,
     },
     // Chore every day after completion
@@ -187,7 +187,9 @@ describe("Given 'done' is called", {
           repeatType: x.repeatType,
           // completionDate: null,
           endDate: new Date(x.expectedEndDate).toISOString(),
-          startDate: x.expectedStartDate ? new Date(x.expectedStartDate).toISOString() : undefined,
+          startDate: x.expectedStartDate
+            ? new Date(x.expectedStartDate).toISOString()
+            : undefined,
         }],
       });
     });
