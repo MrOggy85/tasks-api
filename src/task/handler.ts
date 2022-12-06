@@ -46,12 +46,12 @@ const emptyTask:
   };
 
 export async function create(task: Create) {
-  await entity.create({
+  const id = await entity.create({
     ...emptyTask,
     ...task,
   });
 
-  return true;
+  return id;
 }
 
 type Update = Partial<Create> & {

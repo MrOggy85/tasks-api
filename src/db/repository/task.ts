@@ -84,6 +84,7 @@ async function create(task: Create) {
   const { tagIds, ...t } = task;
   const { id } = await Task.create({ ...t });
   await createTagTasks(tagIds || [], id as number);
+  return id as number;
 }
 
 type Update = Partial<Create> & {

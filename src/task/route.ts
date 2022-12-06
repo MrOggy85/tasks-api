@@ -56,7 +56,7 @@ async function insert(ctx: Context) {
     throw new AppError("'title' is empty", 400);
   }
 
-  await handler.create({
+  const id = await handler.create({
     title,
     description: description || "",
     priority: priority || 0,
@@ -67,7 +67,7 @@ async function insert(ctx: Context) {
     tagIds,
   });
 
-  ctx.response.body = true;
+  ctx.response.body = id;
 }
 
 type UpdateModel = Partial<InsertModel> & {
