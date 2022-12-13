@@ -104,8 +104,16 @@ export async function done(id: number) {
     let newStartDate = null;
 
     if (model.repeatType === "endDate") {
+      let now = new Date();
+      if (isAfter(now, model.endDate)) {
+        now = sub(now, { days: 1 });
+      }
       const cron = parseCronExpression(model.repeat);
-      newEndDate = cron.getNextDate();
+      newEndDate = cron.getNextDate(now);
+      newEndDate.setUTCHours(model.endDate.getUTCHours());
+      newEndDate.setMinutes(model.endDate.getMinutes());
+      newEndDate.setSeconds(model.endDate.getSeconds());
+      newEndDate.setMilliseconds(model.endDate.getMilliseconds());
 
       if (model.startDate) {
         const duration = intervalToDuration({
