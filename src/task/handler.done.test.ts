@@ -22,7 +22,14 @@ const mockModel: TaskModel = {
   completionDate: null,
   repeat: "",
   repeatType: "completionDate",
-  tags: [],
+  tags: [{
+    id: 37,
+    name: "tag_name",
+    bgColor: "",
+    textColor: "",
+    createdAt: new Date("2022-11-13T13:24:00+09:00"),
+    updatedAt: new Date("2022-11-13T13:24:00+09:00"),
+  }],
   createdAt: new Date("2022-11-13T13:24:00+09:00"),
   updatedAt: new Date("2022-11-13T13:24:00+09:00"),
 };
@@ -94,7 +101,7 @@ describe("When endDate repeat for weekdays, endDate has passed", () => {
     assertSpyCall(createStub!, 0, {
       args: [{
         ...expectedModel,
-        tagIds: [],
+        tagIds: [37],
         repeat: "0 16 * * 1-5",
         repeatType: "endDate",
         endDate: expectedEndDate,
@@ -141,7 +148,7 @@ describe("Given 'done' is called", {
     assertSpyCall(updateStub!, 0, {
       args: [{
         ...expectedModel,
-        tagIds: [],
+        tagIds: [37],
         completionDate: new Date(FAKE_DATE).toISOString(),
       }],
     });
@@ -244,7 +251,7 @@ describe("Given 'done' is called", {
       assertSpyCall(createStub!, 0, {
         args: [{
           ...expectedModel,
-          tagIds: [],
+          tagIds: [37],
           repeat: x.repeat,
           repeatType: x.repeatType,
           // completionDate: null,

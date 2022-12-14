@@ -162,6 +162,7 @@ export async function done(id: number) {
 
     newTask = {
       ...previousModel,
+      tagIds: _tags.map((x) => x.id),
       endDate: newEndDate.toISOString(),
       startDate: newStartDate?.toISOString(),
     };
