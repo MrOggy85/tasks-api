@@ -5,11 +5,12 @@ import {
   add,
   intervalToDuration,
   isAfter,
+  isToday,
   parseCronExpression,
   sub,
 } from "../deps.ts";
 
-type Filters = Parameters<typeof entity["getAll"]>[0]
+type Filters = Parameters<typeof entity["getAll"]>[0];
 
 export async function getAll(filters: Filters) {
   const models = await entity.getAll(filters);
@@ -106,16 +107,17 @@ export async function done(id: number) {
     let newStartDate = null;
 
     if (model.repeatType === "endDate") {
-      let now = new Date();
-      if (isAfter(now, model.endDate)) {
-        now = sub(now, { days: 1 });
-      }
+      const now = new Date();
       const cron = parseCronExpression(model.repeat);
       newEndDate = cron.getNextDate(now);
       newEndDate.setUTCHours(model.endDate.getUTCHours());
       newEndDate.setMinutes(model.endDate.getMinutes());
       newEndDate.setSeconds(model.endDate.getSeconds());
       newEndDate.setMilliseconds(model.endDate.getMilliseconds());
+
+      if (isToday(newEndDate)) {
+        newEndDate = add(newEndDate, { days: 1 });
+      }
 
       if (model.startDate) {
         const duration = intervalToDuration({

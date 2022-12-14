@@ -10,7 +10,7 @@ import { done } from "./handler.ts";
 import entity from "../db/repository/task.ts";
 import type { TaskModel } from "../db/models.ts";
 
-const FAKE_DATE = "2022-11-13T13:24:00+09:00";
+const FAKE_DATE = "2022-11-13T13:24:00+09:00"; // Sunday
 
 const mockModel: TaskModel = {
   id: 1,
@@ -53,6 +53,60 @@ function doStub(
     createStub = stubbed;
   }
 }
+
+describe("When endDate repeat for weekdays, endDate has passed", () => {
+  it("it calls 'create' with tomorrows date", async () => {
+    time = new FakeTime("2022-11-16T13:24:00+09:00"); // Wednesday
+
+    doStub("getById", () => {
+      return Promise.resolve<TaskModel>({
+        ...mockModel,
+        repeat: "0 16 * * 1-5",
+        repeatType: "endDate",
+        endDate: new Date("2022-11-15T16:30:00+09:00"),
+        startDate: new Date("2022-11-15T16:30:00+09:00"),
+      });
+    });
+    doStub("update", () => {
+      return Promise.resolve();
+    });
+    doStub("create", () => {
+      return Promise.resolve();
+    });
+
+    await done(1);
+
+    const {
+      id: _id,
+      tags: _tags,
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      completionDate: _completionDate,
+      ...expectedModel
+    } = mockModel;
+
+    const expectedEndDate = new Date("2022-11-17T16:30:00+09:00").toISOString();
+    const expectedStartDate = new Date("2022-11-17T16:30:00+09:00")
+      .toISOString();
+
+    time?.restore();
+
+    assertSpyCall(createStub!, 0, {
+      args: [{
+        ...expectedModel,
+        tagIds: [],
+        repeat: "0 16 * * 1-5",
+        repeatType: "endDate",
+        endDate: expectedEndDate,
+        startDate: expectedStartDate,
+      }],
+    });
+
+    restoreStub(getByIdStub);
+    restoreStub(updateStub);
+    restoreStub(createStub);
+  });
+});
 
 describe("Given 'done' is called", {
   beforeEach: () => {
@@ -119,6 +173,14 @@ describe("Given 'done' is called", {
       endDate: "2022-05-29T06:30:00.000+09:00",
       expectedEndDate: "2023-05-29T06:30:00.000+09:00",
       expectedStartDate: "2023-05-21T06:30:00.000+09:00",
+      repeatType: "endDate" as const,
+    },
+    {
+      repeat: "0 16 * * 1-5",
+      startDate: "2022-11-12T16:30:00+09:00",
+      endDate: "2022-11-12T16:30:00+09:00",
+      expectedEndDate: "2022-11-14T16:30:00.000+09:00",
+      expectedStartDate: "2022-11-14T16:30:00.000+09:00",
       repeatType: "endDate" as const,
     },
     // Chore every 14 day after completion
