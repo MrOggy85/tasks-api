@@ -9,8 +9,10 @@ import {
   sub,
 } from "../deps.ts";
 
-export async function getAll() {
-  const models = await entity.getAll();
+type Filters = Parameters<typeof entity["getAll"]>[0]
+
+export async function getAll(filters: Filters) {
+  const models = await entity.getAll(filters);
   return models;
 }
 

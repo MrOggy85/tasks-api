@@ -43,8 +43,19 @@ async function getTaskWithTags(task: TaskModel) {
   };
 }
 
-async function getAll() {
-  const m = await Task.all() as unknown as TaskModel[];
+type Filters = {
+  isDone?: boolean
+}
+
+async function getAll({ isDone }: Filters) {
+
+  let dbQuery = Task;
+
+  if (isDone !== undefined) {
+    dbQuery = dbQuery.where(Task.field("completion_date"), isDone ? 'is not' : 'is' as any, null)
+  }
+
+  const m = await dbQuery.get() as unknown as TaskModel[];
 
   const promises = m.map((x) => {
     return getTaskWithTags(x);

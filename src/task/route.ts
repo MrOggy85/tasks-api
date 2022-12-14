@@ -6,26 +6,26 @@ import * as handler from "./handler.ts";
 const ROUTE = "/tasks";
 
 type GetAllQuery = {
-  completiondate?: "y" | "n";
+  done?: "y" | "n";
 };
 
 async function getAll(ctx: Context) {
   const q = helpers.getQuery(ctx) as GetAllQuery;
 
-  const models = await handler.getAll();
-
-  if (q.completiondate) {
-    const completionDate = q.completiondate;
-    if (completionDate !== "y" && completionDate !== "n") {
-      throw new AppError("'completiondate' is not 'y' or 'n'", 400);
-    }
-    const filteredModels = models.filter((x) => {
-      return completionDate === "y" ? !!x.completionDate : !x.completionDate;
-    });
-    ctx.response.body = filteredModels;
-  } else {
-    ctx.response.body = models;
+  let isDone: boolean | undefined = undefined;
+  if (q.done === 'y') {
+    isDone = true;
+  } else if (q.done === 'n') {
+    isDone = false;
+  } else if (q.done !== undefined) {
+    throw new AppError("'done' is not 'y' or 'n'", 400);
   }
+
+  const models = await handler.getAll({
+    isDone
+  });
+
+  ctx.response.body = models;
 }
 
 type GetByIdContext = RouterContext<"/tasks/:id", { id: string }>;
