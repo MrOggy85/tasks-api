@@ -23,6 +23,10 @@ mandatoryEnvVars.forEach((x) => {
   }
 });
 
+const HOST = getEnv("HTTP_HOST") || "0.0.0.0";
+const HTTP_PORT = getEnv("HTTP_PORT");
+const PORT = HTTP_PORT ? Number(HTTP_PORT) : 8000;
+
 // Deno Deploy Env vars
 console.log("DENO_REGION", Deno.env.get("DENO_REGION"));
 console.log("DENO_DEPLOYMENT_ID", Deno.env.get("DENO_DEPLOYMENT_ID"));
@@ -42,5 +46,5 @@ console.timeEnd("time");
 console.log("DONE");
 
 console.log("");
-console.log("Server is listening on port 8000");
-await app.listen({ port: 8000 });
+console.log(`Server is listening on: ${HOST}:${PORT}`);
+await app.listen({ hostname: HOST, port: PORT });
