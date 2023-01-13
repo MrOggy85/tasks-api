@@ -19,7 +19,9 @@ function logger(ctx: Context) {
 }
 
 function initServer() {
-  const app = new Application();
+  const app = new Application({
+    proxy: true,
+  });
 
   app.addEventListener("error", (evt) => {
     console.error(evt.error);
