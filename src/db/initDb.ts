@@ -15,7 +15,9 @@ console.log(
     DB_PASSWORD.substring(DB_PASSWORD.length - 3)
   }`,
 );
+console.log("DB_HOST", DB_HOST);
 console.log("DB_NAME", DB_NAME);
+console.log("DB_PORT", DB_PORT);
 
 function initDb() {
   const connector = new PostgresConnector({

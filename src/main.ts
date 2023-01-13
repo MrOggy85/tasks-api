@@ -23,6 +23,13 @@ mandatoryEnvVars.forEach((x) => {
   }
 });
 
+console.log(
+  "AUTH_HEADER",
+  `${getEnv("AUTH_HEADER").substring(0, 2)}***${
+    getEnv("AUTH_HEADER").substring(getEnv("AUTH_HEADER").length - 3)
+  }`,
+);
+
 const HOST = getEnv("HTTP_HOST") || "0.0.0.0";
 const HTTP_PORT = getEnv("HTTP_PORT");
 const PORT = HTTP_PORT ? Number(HTTP_PORT) : 8000;

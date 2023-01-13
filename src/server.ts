@@ -74,6 +74,7 @@ function initServer() {
 
   app.use(async (ctx, next) => {
     const authHeader = ctx.request.headers.get("Authorization");
+    console.log("authHeader", authHeader);
     if (authHeader === getEnv("AUTH_HEADER")) {
       await next();
     } else {
